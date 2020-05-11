@@ -32,14 +32,16 @@ async def on_message(message):
         #  a users can  google search 
         elif message.content.startswith('!google '):
             search_query=message.content.strip('!google ')
+            print(search_query)
             UserHistory.add(search_query,message.author.id,message.channel.id)
             result = google_search(search_query,google_api_key,google_cse_id)
             for item in result['items']:
                 await message.channel.send(item['link'])
-                
+
         # if user wants his recent search history w.r.t to some  string 
         elif  message.content.startswith('!recent '):
             history=message.content.strip('!recent ')
+            print(history)
             result=UserHistory.get_search_history(history,message.author.id,message.channel.id)
             print(len(result))
             for item in result:
