@@ -1,18 +1,11 @@
 
 from sqlalchemy import Column, Integer, String
-from sqlalchemy import create_engine
 from config import Config
-from sqlalchemy import and_,DateTime
+from sqlalchemy import DateTime
 import os
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import datetime
-#connect the sqlalchemy framework to the db
-engine = create_engine(Config.POSTGRES_URL, echo = True)
-Base = declarative_base()
-#define configuration of a db session
-Session = sessionmaker(bind = engine)
-
+from db import Session,Base
 #define user history table 
 class UserHistory(Base):
     __tablename__ = 'user_history'
@@ -38,14 +31,17 @@ class UserHistory(Base):
     @classmethod
     def add(cls,search_query,user_id):
         session = Session()
-        srch_query=cls(user_id=str(user_id),search_query=search_query)
-        session.add(srch_query)
+        srch_query= session.query(cls).filter(*[cls.search_query==search_query,cls.user_id==str(user_id)])
+        if srch_query !=None:
+            srch_query.searched_at=datetime.datetime.utcnow()
+        else:
+            srch_query=cls(user_id=str(user_id),search_query=search_query)
+            session.add(srch_query)
         session.commit()
         session.close()
         
 
 #create the defined tables in the db
-Base.metadata.create_all(engine)
 
 
         
