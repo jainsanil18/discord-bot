@@ -33,6 +33,7 @@ async def on_message(message):
         elif message.content.startswith('!google '):
             search_query=message.content.replace('!google ','')
             print(search_query)
+            #save search query in db
             UserHistory.add(search_query,message.author.id)
             result = google_search(search_query,google_api_key,google_cse_id)
             for item in result['items']:

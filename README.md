@@ -4,7 +4,7 @@ a demo of discord bot using python
 
 # BOT FUNCTIONALITIES
 - provide goole search result links
-- user's server based search history
+- user's server based search history in descending order w.r.t to datetime
 #
 
 # BOT URL TO ADD TO A DISCORD SERVER
