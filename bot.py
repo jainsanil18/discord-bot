@@ -33,7 +33,7 @@ async def on_message(message):
         elif message.content.startswith('!google '):
             search_query=message.content.replace('!google ','')
             print(search_query)
-            UserHistory.add(search_query,message.author.id,message.channel.id)
+            UserHistory.add(search_query,message.author.id)
             result = google_search(search_query,google_api_key,google_cse_id)
             for item in result['items']:
                 await message.channel.send(item['link'])
@@ -42,7 +42,7 @@ async def on_message(message):
         elif  message.content.startswith('!recent '):
             history=message.content.replace('!recent ','')
             print(history)
-            result=UserHistory.get_search_history(history,message.author.id,message.channel.id)
+            result=UserHistory.get_search_history(history,message.author.id)
             print(len(result))
             for item in result:
                 await message.channel.send(item)

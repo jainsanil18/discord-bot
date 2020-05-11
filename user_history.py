@@ -18,17 +18,16 @@ class UserHistory(Base):
     __tablename__ = 'user_history'
     id = Column(Integer, primary_key=True)
     user_id =Column(String)
-    channel_id = Column(String)
     search_query = Column(String)
     searched_at=Column(DateTime(),default=datetime.datetime.utcnow)
 
     # retrieval of search history of user in the particular channel in descending order timewise
     @classmethod
-    def get_search_history(cls,search_query,user_id,channel_id):
+    def get_search_history(cls,search_query,user_id):
         session = Session()
         db_query="%"+search_query+"%"
         print(db_query)
-        result_obj= session.query(cls).filter(*[cls.search_query.ilike(db_query),cls.user_id==str(user_id),cls.channel_id==str(channel_id)]).order_by(cls.searched_at.desc()).all()
+        result_obj= session.query(cls).filter(*[cls.search_query.ilike(db_query),cls.user_id==str(user_id)]).order_by(cls.searched_at.desc()).all()
         result=[]
         for row in result_obj:
             result.append(row.search_query)
@@ -37,9 +36,9 @@ class UserHistory(Base):
     
     #storing of search query in db
     @classmethod
-    def add(cls,search_query,user_id,channel_id):
+    def add(cls,search_query,user_id):
         session = Session()
-        srch_query=cls(user_id=str(user_id),channel_id=str(channel_id),search_query=search_query)
+        srch_query=cls(user_id=str(user_id),search_query=search_query)
         session.add(srch_query)
         session.commit()
         session.close()
