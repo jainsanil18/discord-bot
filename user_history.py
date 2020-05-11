@@ -1,6 +1,5 @@
 
 from sqlalchemy import Column, Integer, String
-from config import Config
 from sqlalchemy import DateTime
 import os
 from sqlalchemy.ext.declarative import declarative_base
@@ -31,17 +30,20 @@ class UserHistory(Base):
     @classmethod
     def add(cls,search_query,user_id):
         session = Session()
-        srch_query= session.query(cls).filter(*[cls.search_query==search_query,cls.user_id==str(user_id)])
-        if srch_query !=None:
+        srch_query= session.query(cls).filter(*[cls.search_query==search_query,cls.user_id==str(user_id)]).all()
+        print(srch_query)
+        if len(srch_query)!=0:
             srch_query.searched_at=datetime.datetime.utcnow()
+            session.commit()
+            session.close()
         else:
             srch_query=cls(user_id=str(user_id),search_query=search_query)
             session.add(srch_query)
-        session.commit()
-        session.close()
+            session.commit()
+            session.close()
+        
         
 
-#create the defined tables in the db
 
 
         
