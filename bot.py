@@ -2,13 +2,16 @@ import discord
 import requests
 from config import Config
 from googleapiclient.discovery import build
+from db import Base,engine
 from user_history import UserHistory
-
 
 discord_token = Config.DISCORD_TOKEN
 client = discord.Client()
 google_api_key=Config.GOOGLE_API_KEY
 google_cse_id=Config.CSE_ID
+
+#create the defined tables in the db
+Base.metadata.create_all(engine)
 
 #to retrieve google search results
 def google_search(search_term, api_key, cse_id, **kwargs):
