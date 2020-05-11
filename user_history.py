@@ -33,7 +33,7 @@ class UserHistory(Base):
         srch_query= session.query(cls).filter(*[cls.search_query==search_query,cls.user_id==str(user_id)]).all()
         print(srch_query)
         if len(srch_query)!=0:
-            srch_query.searched_at=datetime.datetime.utcnow()
+            srch_query[0].searched_at=datetime.datetime.utcnow()
             session.commit()
             session.close()
         else:
